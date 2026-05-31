@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     searchResults.innerHTML = ''; // Clear old results
 
     if (query.length < 2) {
-      searchResults.innerHTML = '<p class="text-muted small text-center mt-3">Type at least 2 characters to search...</p>';
+      // Changed to text-white-50 for visibility
+      searchResults.innerHTML = '<p class="text-white-50 small text-center mt-3">Type at least 2 characters to search...</p>';
       return;
     }
 
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="${result.url}" class="list-group-item list-group-item-action bg-dark text-white border-secondary mb-2 rounded" style="transition: all 0.3s ease;">
             <div class="d-flex w-100 justify-content-between align-items-center">
               <h6 class="mb-1 text-info"><i class="bi bi-search me-2"></i>${result.title}</h6>
-              <i class="bi bi-chevron-right text-muted small"></i>
+              <i class="bi bi-chevron-right text-white-50 small"></i>
             </div>
             <small class="text-white-50">Go to page</small>
           </a>

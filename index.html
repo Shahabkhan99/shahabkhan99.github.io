@@ -22,6 +22,16 @@
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
 
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+  /* Push the Scroll-Top button higher to clear the Tawk.to widget */
+  #scroll-top {
+    bottom: 120px !important; 
+    right: 30px !important;
+    z-index: 9999 !important; /* Ensures it stays clickable */
+  }
+</style>
+
 </head>
 
 <body class="index-page">
@@ -722,31 +732,38 @@
                 <p>Feel free to reach out for business inquiries, consulting, or technical collaborations.</p>
               </div>
 
-              <form action="forms/contact.php" method="post" class="php-email-form">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <input type="email" class="form-control" name="email" placeholder="Email Address" required="">
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <input type="text" class="form-control" name="subject" placeholder="What's this about?" required="">
-                </div>
-                <div class="mb-4">
-                  <textarea class="form-control" name="message" rows="4" placeholder="Tell us more about your project..." required=""></textarea>
-                </div>
-                <div class="my-3">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-                </div>
-                <button type="submit" class="submit-btn">
-                  <span>Send Message</span>
-                  <i class="bi bi-send-fill"></i>
-                </button>
-              </form>
+<div class="direct-chat-hub mt-4 text-center">
+  <p class="text-white-50 mb-4" style="font-size: 0.95rem;">Skip the form. Connect directly with me for immediate business inquiries, consulting, or technical collaborations.</p>
+  
+  <!-- Email Button (Opens Default Mail App) -->
+  <a href="mailto:shahab99khan@gmail.com?subject=Business%20Inquiry%20from%20Portfolio" class="btn w-100 mb-3 text-white d-flex align-items-center justify-content-center" style="background-color: #ea4335; padding: 15px; font-weight: 600; border-radius: 8px; transition: transform 0.2s; border: none;">
+    <i class="bi bi-envelope-fill me-2" style="font-size: 1.2rem;"></i> Send an Email
+  </a>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/966570323979" target="_blank" class="btn w-100 mb-3 text-white d-flex align-items-center justify-content-center" style="background-color: #25D366; padding: 15px; font-weight: 600; border-radius: 8px; transition: transform 0.2s; border: none;">
+    <i class="bi bi-whatsapp me-2" style="font-size: 1.2rem;"></i> Chat on WhatsApp
+  </a>
+
+  <!-- Telegram Button -->
+  <a href="https://t.me/shahab99khan" target="_blank" class="btn w-100 mb-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0088cc; padding: 15px; font-weight: 600; border-radius: 8px; transition: transform 0.2s; border: none;">
+    <i class="bi bi-telegram me-2" style="font-size: 1.2rem;"></i> Connect on Telegram
+  </a>
+</div>
+
+<style>
+  .direct-chat-hub .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  }
+</style>
+
+<style>
+  .direct-chat-hub .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+</style>
             </div>
           </div>
 
@@ -822,6 +839,21 @@
 
   </main>
 
+<!-- ========================================== -->
+  <!-- GLOBAL SEARCH MODAL -->
+  <!-- ========================================== -->
+  <style>
+    /* Force the search placeholder to be a readable light gray */
+    #globalSearchInput::placeholder {
+      color: #a0aec0 !important;
+      opacity: 1;
+    }
+    /* Ensure typed text is bright white */
+    #globalSearchInput {
+      color: #ffffff !important;
+    }
+  </style>
+
   <div class="modal fade" id="globalSearchModal" tabindex="-1" aria-labelledby="globalSearchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" style="margin-top: 5rem;">
       <div class="modal-content shadow-lg" style="background-color: #171923; border: 1px solid #2a2e40; border-radius: 12px;">
@@ -831,14 +863,15 @@
             <span class="input-group-text bg-transparent border-secondary text-info border-end-0">
               <i class="bi bi-search"></i>
             </span>
-            <input type="text" id="globalSearchInput" class="form-control bg-transparent border-secondary text-white border-start-0 shadow-none" placeholder="Search projects, skills, jobs..." autocomplete="off">
+            <input type="text" id="globalSearchInput" class="form-control bg-transparent border-secondary border-start-0 shadow-none" placeholder="Search projects, skills, jobs..." autocomplete="off">
           </div>
           <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body pt-3 pb-4">
           <div id="globalSearchResults" class="list-group list-group-flush border-0">
-            <p class="text-muted small text-center mt-2">What are you looking for?</p>
+            <!-- Changed to text-white-50 so it's readable on dark backgrounds -->
+            <p class="text-white-50 small text-center mt-2">What are you looking for?</p>
           </div>
         </div>
 
@@ -943,6 +976,20 @@
       });
     });
   </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a1c7ec675643d1c2d678f59/1jpvkue72';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 
 </body>
 </html>
