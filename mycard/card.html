@@ -53,9 +53,9 @@
             flex-grow: 1; 
         }
 
-        /* THEME SWITCHER BUTTON */
+        /* FIX: THEME SWITCHER BUTTON (Now Fixed to Screen) */
         #switch {
-            position: absolute; 
+            position: fixed; /* Changed from absolute to fixed */
             top: 20px;
             right: 20px;
             background: #1c1d24;
@@ -66,10 +66,10 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 9999;
+            z-index: 10000; /* Forces it above EVERYTHING */
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             color: #facc15;
-            font-size: 20px;
+            font-size: 22px;
             transition: transform 0.2s ease, background 0.3s;
         }
         #switch:hover { transform: scale(1.1); }
@@ -98,7 +98,6 @@
             overflow: hidden;
         }
 
-        /* FIX: Changed from generic 'img' to the specific ID */
         #dom-profile-img {
             width: 100%;
             height: 100%;
@@ -114,7 +113,6 @@
 
         .header-content {
             position: absolute;
-            /* FIX: Pushed the text block as far down as safely possible */
             bottom: 5px; 
             left: 25px; 
             z-index: 2;
@@ -132,7 +130,6 @@
 
         .id-company-wrapper { display: flex; align-items: center; gap: 8px; }
         
-        /* FIX: Resized to perfectly match the font height */
         .company-icon {
             width: 18px; 
             height: 18px;
@@ -150,21 +147,52 @@
         /* PANEL 2: Details & Social Section         */
         /* ========================================= */
         .id-details-area {
-            /* FIX: Added 25px of top padding to bring the space back! */
             padding: 10px 25px 20px 25px;
             display: flex;
             flex-direction: column;
             z-index: 3;
-            /* Ensure there is no negative margin pulling it up */
             margin-top: 0; 
         }
 
-        .about-card {
-            background: #1c1d24; border-radius: 20px; padding: 20px 20px;
-            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin-bottom: 25px; 
+        /* CLICKABLE ABOUT CARD */
+        .about-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            background: #1c1d24; 
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid transparent;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
         }
-        .about-card h3 { margin: 0 0 10px 0; font-size: 1.2rem; color: #ffffff; }
+
+        .about-card-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #0d6efd; 
+            background: #23252f; 
+        }
+
+        .about-card-link h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative; 
+            gap: 8px;
+        }
+
+        .about-card-link .arrow-icon {
+            position: absolute;
+            right: 0;
+            font-size: 1.5rem;
+        }
+
         .id-tagline { color: #a0aec0; font-size: 0.9rem; margin: 0; line-height: 1.5; }
 
         .links {
@@ -231,7 +259,6 @@
         .qr-code-img { width: 200px; height: 200px; background: #fff; padding: 10px; border-radius: 12px; margin-bottom: 20px; }
         .barcode-img { height: 60px; max-width: 100%; background: #fff; padding: 10px; border-radius: 8px; }
 
-        /* Contact Details List Styling inside Modal */
         .contact-details-list { display: flex; flex-direction: column; gap: 12px; text-align: left; }
         
         .detail-item {
@@ -241,13 +268,11 @@
         }
         
         .detail-item:hover { background: #373c52; transform: translateY(-2px); }
-        body.light-theme .detail-item:hover { background: #e2e8f0; }
 
         .detail-item i { font-size: 20px; color: #facc15; width: 25px; text-align: center; }
         .detail-item div { display: flex; flex-direction: column; }
         .detail-item small { color: #a0aec0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; transition: color 0.3s; }
         .detail-info { color: #ffffff; font-size: 0.95rem; font-weight: 500; word-break: break-word; }
-
 
         /* ========================================= */
         /* DESKTOP LAYOUT OVERRIDES                  */
@@ -281,26 +306,25 @@
 
         body.light-theme .action-circle-btn, body.light-theme .action-pill-btn { background: #0f1015; color: #fff; }
         
-        /* Modal Light Theme */
         body.light-theme .modal-content { background: #ffffff; border: 1px solid #cbd5e1; }
         body.light-theme .modal-content h3 { color: #0f1015 !important; }
         body.light-theme .detail-item { background: #f8fafc; border: 1px solid #e2e8f0; }
         body.light-theme .detail-info { color: #0f1015; }
 
-        /* Counter Containment */
         .page-bottom-counter {
             text-align: center; padding: 20px; margin-top: 20px; color: #a0aec0;
             font-size: 14px; position: relative; z-index: 10;
             width: 100%; max-width: 100vw; overflow: hidden; display: flex; flex-direction: column; align-items: center;
         }
-        .page-bottom-counter img, .page-bottom-counter iframe { max-width: 100%; height: auto; }
         body.light-theme .page-bottom-counter { color: #475569; }
+
     </style>
 </head>
 <body class="black-theme"> 
-        <div id="switch">
-            <i class="fas fa-sun"></i>
-        </div>
+    
+    <div id="switch" title="Toggle Theme">
+        <i class="bi bi-brightness-high-fill"></i>
+    </div>
     
     <div class="main-wrapper">
         <div class="container">
@@ -322,10 +346,15 @@
                 </div>
                 
                 <div class="id-details-area">
-                    <div class="about-card">
-                        <h3>About Me</h3>
-                        <p class="id-tagline" id="dom-tagline">Loading information...</p>
-                    </div>
+              
+                <a href="javascript:void(0)" onclick="openVcardModal()" class="about-card-link" title="View Contact Details">
+                    <h3>
+                        <i class="bi bi-person-lines-fill" style="color: #f39c12;"></i> 
+                        About Me 
+                        <i class="bi bi-arrow-right-short arrow-icon text-white-50"></i>
+                    </h3>
+                    <p class="id-tagline mb-0" id="dom-tagline">Loading information...</p>
+                </a>
 
                     <div class="links" id="dom-social-links"></div>
                 </div> 
@@ -415,7 +444,6 @@
             fetch(`json/data.json?t=${new Date().getTime()}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Populate Main Card
                     document.getElementById('dom-company').textContent = data.company;
                     document.getElementById('dom-name').innerHTML = data.name.replace(" ", "<br>"); 
                     document.getElementById('dom-designation').textContent = data.designation;
@@ -425,17 +453,13 @@
                     document.getElementById('dom-profile-img').src = data.profile_image;
                     document.getElementById('dom-qr-code').src = data.qr_code;
                     document.getElementById('dom-barcode').src = data.barcode;
-                    
-                    // FIX: Load the company icon from JSON (with a blank fallback to prevent broken images)
                     document.getElementById('dom-company-icon').src = data.company_icon || "";
 
-                    // Populate Contact Modal Variables
                     document.getElementById('dom-modal-name').textContent = data.name;
                     document.getElementById('dom-modal-email').textContent = data.email;
                     document.getElementById('dom-modal-phone').textContent = data.phone || "Not provided";
                     document.getElementById('dom-modal-address').textContent = data.address || "Not provided";
 
-                    // vCard generator attached to the Add to Contact button
                     const contactBtn = document.getElementById('dom-contact-btn');
                     contactBtn.href = "#"; 
                     contactBtn.addEventListener('click', (e) => {
@@ -470,7 +494,6 @@
                 });
         });
 
-        // vCard Generator Function
         function generateAndDownloadVCard(data) {
             let vcard = `BEGIN:VCARD\nVERSION:3.0\n`;
             vcard += `FN:${data.name || ""}\n`;
@@ -495,7 +518,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Copy to Clipboard Function with Visual Feedback
         function copyDetail(elementId, clickedItem) {
             const textToCopy = document.getElementById(elementId).innerText;
             const labelElement = clickedItem.querySelector('small');
@@ -517,19 +539,20 @@
             }
         }
 
+        // Updated Theme Switcher Logic for Bootstrap Icons
         const themeBtn = document.getElementById('switch');
         const themeIcon = themeBtn.querySelector('i');
         
         themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-theme');
             if (document.body.classList.contains('light-theme')) {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('bi-brightness-high-fill');
+                themeIcon.classList.add('bi-moon-stars-fill');
                 themeBtn.style.color = '#fff';
                 themeBtn.style.background = '#0f1015';
             } else {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.remove('bi-moon-stars-fill');
+                themeIcon.classList.add('bi-brightness-high-fill');
                 themeBtn.style.color = '#facc15';
                 themeBtn.style.background = '#1c1d24';
             }
