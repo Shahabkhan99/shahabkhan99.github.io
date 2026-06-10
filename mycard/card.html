@@ -498,6 +498,7 @@
                 });
         });
 
+            // vCard Generator Function (Updated with Map Location)
         function generateAndDownloadVCard(data) {
             let vcard = `BEGIN:VCARD\nVERSION:3.0\n`;
             vcard += `FN:${data.name || ""}\n`;
@@ -506,6 +507,13 @@
             if (data.phone) vcard += `TEL;TYPE=WORK,VOICE:${data.phone}\n`;
             if (data.email) vcard += `EMAIL;TYPE=WORK,INTERNET:${data.email}\n`;
             if (data.address) vcard += `ADR;TYPE=WORK:;;${data.address};;;;\n`;
+            
+            // Add the Google Maps link to the contact card
+            if (data.map_link) {
+                vcard += `URL;TYPE=WORK:${data.map_link}\n`;
+                vcard += `NOTE:Location Map: ${data.map_link}\n`;
+            }
+            
             vcard += `END:VCARD`;
 
             const blob = new Blob([vcard], { type: 'text/vcard' });
