@@ -8,6 +8,7 @@
   "email": "shahab99khan@gmail.com",
   "phone": "+966 570 323 979",
   "address": "Jeddah, Saudi Arabia",
+  "map_link": "https://maps.app.goo.gl/h1c3um45QFCnJCXt7",
 
   "company": "SGAI Portfolio",
   "company_icon": "images/logo.png",
@@ -15,6 +16,7 @@
   "qr_code": "images/QR_Code_6.png",
   "barcode": "images/Barcode_1.png",
   "employee_id": "EMP-001-KSA",
+
 
   "social_links": [
     { "platform": "My Website", "url": "https://shahabkhan99.github.io/", "icon": "bi bi-globe", "color": "#ce0458" },
