@@ -421,14 +421,13 @@
                         <div class="detail-info" id="dom-modal-phone">Loading...</div>
                     </div>
                 </div>
-                <div class="detail-item" onclick="copyDetail('dom-modal-address', this)">
+                    <div class="detail-item" id="address-detail-item" onclick="openGoogleMaps(this, 'dom-modal-address')">
                     <i class="fas fa-map-marker-alt"></i>
                     <div>
-                        <small>Address</small>
+                        <small>Address (Tap for Map)</small>
                         <div class="detail-info" id="dom-modal-address">Loading...</div>
                     </div>
                 </div>
-            </div>
             
             <div style="margin-top: 15px; font-size: 0.8rem; color: #a0aec0; font-style: italic;">
                 *Tap any detail to copy
@@ -459,6 +458,11 @@
                     document.getElementById('dom-modal-email').textContent = data.email;
                     document.getElementById('dom-modal-phone').textContent = data.phone || "Not provided";
                     document.getElementById('dom-modal-address').textContent = data.address || "Not provided";
+
+                    // NEW: Attach custom map link to the button if it exists
+                    if (data.map_link) {
+                        document.getElementById('address-detail-item').dataset.mapLink = data.map_link;
+                    }
 
                     const contactBtn = document.getElementById('dom-contact-btn');
                     contactBtn.href = "#"; 
@@ -579,6 +583,35 @@
                 }).catch(console.error);
             } else {
                 alert("Sharing is not supported on this browser. Copy the URL from your address bar!");
+            }
+        }
+
+        // Smart Map Opener (Detects Apple vs Android/PC)
+        function openGoogleMaps(clickedItem, elementId) {
+            const addressText = document.getElementById(elementId).innerText;
+            const customMapLink = clickedItem.dataset.mapLink;
+            
+            if (customMapLink) {
+                // If you provided an exact link in data.json, it opens that link.
+                // (On iPhone without the Google Maps app, this safely opens in Safari)
+                window.open(customMapLink, '_blank');
+            } else if (addressText && addressText !== "Loading..." && addressText !== "Not provided") {
+                // Fallback: Smart Text Search
+                const encodedAddress = encodeURIComponent(addressText);
+                
+                // Detect if the user is on an iPhone, iPad, or Mac
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                
+                let mapsUrl;
+                if (isIOS) {
+                    // Opens native Apple Maps
+                    mapsUrl = `http://maps.apple.com/?q=${encodedAddress}`;
+                } else {
+                    // Opens Google Maps
+                    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+                }
+                
+                window.open(mapsUrl, '_blank');
             }
         }
     </script>
