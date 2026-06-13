@@ -23,61 +23,6 @@
 
   <link href="assets/css/main.css" rel="stylesheet">
      
-  <style>
-    /* Force exactly equal heights so Isotope aligns them in perfect rows */
-    .portfolio-wrapper {
-      display: flex;
-      flex-direction: column;
-      height: 420px; /* Fixed height eliminates the up-and-down masonry stagger */
-      background-color: #171923; /* Matches the dark template card color */
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    
-    .portfolio-image {
-      height: 200px;
-      width: 100%;
-      background-color: #ffffff; /* White background for logos */
-    }
-    
-    .portfolio-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* Restores image to fill without padding */
-    }
-    
-    .portfolio-content {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-    
-    .portfolio-content h3 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-    
-    .portfolio-content p {
-      font-size: 0.9rem;
-      margin-bottom: 0;
-      color: rgba(255, 255, 255, 0.7);
-      display: -webkit-box;
-      -webkit-line-clamp: 3; /* Limits text to 3 lines to keep it neat */
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Force the search placeholder to be a readable light gray */
-    #globalSearchInput::placeholder {
-      color: #a0aec0 !important;
-      opacity: 1;
-    }
-    /* Ensure typed text is bright white */
-    #globalSearchInput {
-      color: #ffffff !important;
-    }
-  </style>
 </head>
 
 <body class="index-page">
@@ -151,6 +96,62 @@
 
     </div>
   </header>
+
+   <style>
+    /* Force exactly equal heights so Isotope aligns them in perfect rows */
+    .portfolio-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 420px; /* Fixed height eliminates the up-and-down masonry stagger */
+      background-color: #171923; /* Matches the dark template card color */
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .portfolio-image {
+      height: 200px;
+      width: 100%;
+      background-color: #ffffff; /* White background for logos */
+    }
+    
+    .portfolio-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Restores image to fill without padding */
+    }
+    
+    .portfolio-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    
+    .portfolio-content h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    
+    .portfolio-content p {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.7);
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Limits text to 3 lines to keep it neat */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Force the search placeholder to be a readable light gray */
+    #globalSearchInput::placeholder {
+      color: #a0aec0 !important;
+      opacity: 1;
+    }
+    /* Ensure typed text is bright white */
+    #globalSearchInput {
+      color: #ffffff !important;
+    }
+  </style>
 
   <main class="main">
     <section id="certifications" class="portfolio section">
