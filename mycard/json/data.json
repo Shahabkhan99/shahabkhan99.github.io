@@ -26,6 +26,6 @@
     { "platform": "XDA Profile", "url": "https://xdaforums.com/m/shahabkhan99.4639231/", "icon": "bi bi-android2", "color": "#3DDC84" },
     { "platform": "WhatsApp", "url": "https://wa.me/966570323979", "icon": "bi bi-whatsapp", "color": "#25D366" },
     { "platform": "Telegram", "url": "https://t.me/shahab99khan", "icon": "bi bi-telegram", "color": "#229ED9" },
-    { "platform": "Contact Card", "url": "card.html", "icon": "bi bi-person-vcard", "color": "#f39c12" }
+    { "platform": "Contact Card", "url": "card.html", "icon": "Di bi-person-vcard", "color": "#f39c12" }
   ]
 }
