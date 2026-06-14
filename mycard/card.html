@@ -318,6 +318,39 @@
         }
         body.light-theme .page-bottom-counter { color: #475569; }
 
+        /* ========================================= */
+        /* TOP LEFT CUBE LINK BUTTON                 */
+        /* ========================================= */
+        #cube-link {
+            position: fixed; 
+            top: 20px;
+            left: 20px; /* Locked to the left */
+            background: #1c1d24;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            color: #0d6efd; /* Cool blue color for the cube */
+            font-size: 20px;
+            text-decoration: none;
+            transition: transform 0.2s ease, background 0.3s, color 0.3s;
+        }
+        
+        #cube-link:hover { 
+            transform: scale(1.1); 
+            color: #0b5ed7;
+        }
+
+        /* Light Theme Support for the Cube */
+        body.light-theme #cube-link {
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
     </style>
 </head>
 <body class="black-theme"> 
@@ -325,6 +358,11 @@
     <div id="switch" title="Toggle Theme">
         <i class="bi bi-brightness-high-fill"></i>
     </div>
+
+    <!-- TOP LEFT: Rubik's Cube Link -->
+    <a href="cube.html" id="cube-link" title="Open Rubik's Cube">
+        <i class="fas fa-cube"></i>
+    </a>
     
     <div class="main-wrapper">
         <div class="container">
@@ -646,6 +684,13 @@
         async src="//gc.zgo.at/count.js"></script>
     <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
+    <!-- Cleaned up GoatCounter Analytics -->
+    <script data-goatcounter="https://shahab99khan.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     
+    <!-- Footer Year Script -->
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+
+</html>
 </body>
 </html>
