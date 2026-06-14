@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional 3D Rubik's Cube</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: sans-serif; user-select: none; }
+        
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 16px;
+            cursor: pointer;
+            background: #2a2a2a;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+
+        button:hover { background: #444; border-color: #777; transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+
+        .btn-blue { background: #0056b3; border-color: #007bff; }
+        .btn-blue:hover { background: #007bff; border-color: #3399ff; }
+
+        .btn-red { background: #b30000; border-color: #ff0000; }
+        .btn-red:hover { background: #ff1a1a; border-color: #ff4d4d; }
+
+        #hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #777;
+            pointer-events: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-container">
+        <button id="shuffleBtn" class="btn-blue">Shuffle Cube</button>
+        <button id="resetCubeBtn" class="btn-red">Reset Cube</button>
+        <button id="resetCamBtn">Reset Camera</button>
+    </div>
+    
+    <div id="hint">
+        <strong>Drag background</strong> to rotate camera. <strong>Drag a piece</strong> to turn a layer.
+
+            <div class="container border-top border-dark pt-3">
+                <small class="text-white-50">
+                    &copy; <span id="year"></span> SGAI 
+                    <span class="mx-2">|</span> 
+                    Designed by <a href="../index.html" style="color: #f39c12; text-decoration: none;">SGAI</a>
+                </small>
+            </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // --- 1. SETUP ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(5.5, 5.5, 6.5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.enablePan = false;
+
+        // --- 2. REALISTIC STICKER GENERATOR ---
+        function getStickerMaterial(colorHex) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            
+            // Black plastic background
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, 256, 256);
+            
+            // Colored sticker with rounded corners
+            ctx.fillStyle = colorHex;
+            ctx.lineJoin = "round";
+            ctx.lineWidth = 16;
+            ctx.strokeStyle = colorHex;
+            
+            // Leave a border of 16px around the edge
+            ctx.strokeRect(16, 16, 224, 224);
+            ctx.fillRect(16, 16, 224, 224);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            return new THREE.MeshBasicMaterial({ map: texture });
+        }
+
+        const blackMaterial = new THREE.MeshBasicMaterial({ color: 0x0a0a0a });
+
+        // Colors: Right(Red), Left(Orange), Top(White), Bottom(Yellow), Front(Green), Back(Blue)
+        const stickerColors = {
+            right: getStickerMaterial('#b90000'),
+            left: getStickerMaterial('#ff5900'),
+            top: getStickerMaterial('#ffffff'),
+            bottom: getStickerMaterial('#ffd500'),
+            front: getStickerMaterial('#009b48'),
+            back: getStickerMaterial('#0045ad')
+        };
+
+        // --- 3. BUILD THE CUBE ---
+        const cubeGroup = new THREE.Group();
+        scene.add(cubeGroup);
+        
+        const allCubies = [];
+
+        for (let x = -1; x <= 1; x++) {
+            for (let y = -1; y <= 1; y++) {
+                for (let z = -1; z <= 1; z++) {
+                    // Only apply colored stickers to the absolute outer faces
+                    const materials = [
+                        x === 1 ? stickerColors.right : blackMaterial,
+                        x === -1 ? stickerColors.left : blackMaterial,
+                        y === 1 ? stickerColors.top : blackMaterial,
+                        y === -1 ? stickerColors.bottom : blackMaterial,
+                        z === 1 ? stickerColors.front : blackMaterial,
+                        z === -1 ? stickerColors.back : blackMaterial
+                    ];
+                    
+                    // Box size is 0.96. Since they are placed at integer coordinates (-1, 0, 1), 
+                    // this leaves a perfect 0.04 gap between pieces to show the black core.
+                    const geometry = new THREE.BoxGeometry(0.96, 0.96, 0.96);
+                    const cubie = new THREE.Mesh(geometry, materials);
+
+                    cubie.position.set(x, y, z);
+                    
+                    // Save original state for the Reset Button
+                    cubie.userData = { 
+                        initialPosition: new THREE.Vector3(x, y, z),
+                        initialRotation: new THREE.Quaternion()
+                    };
+                    
+                    cubeGroup.add(cubie);
+                    allCubies.push(cubie);
+                }
+            }
+        }
+
+        const pivot = new THREE.Object3D();
+        scene.add(pivot);
+
+        // --- 4. ANIMATE ROTATION ---
+        let isAnimating = false;
+
+        function rotateLayer(axis, level, direction, duration = 250) {
+            return new Promise(resolve => {
+                if (isAnimating) return resolve();
+                isAnimating = true;
+
+                const activeCubies = allCubies.filter(c => Math.abs(c.position[axis] - level) < 0.1);
+                activeCubies.forEach(c => pivot.attach(c));
+
+                const startAngle = pivot.rotation[axis];
+                const targetAngle = startAngle + (Math.PI / 2) * direction;
+                const startTime = performance.now();
+
+                function animateStep(time) {
+                    const elapsed = time - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Smooth easing out
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    pivot.rotation[axis] = startAngle + (targetAngle - startAngle) * ease;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateStep);
+                    } else {
+                        pivot.rotation[axis] = targetAngle;
+                        pivot.updateMatrixWorld();
+                        
+                        activeCubies.forEach(c => {
+                            cubeGroup.attach(c);
+                            c.position.x = Math.round(c.position.x);
+                            c.position.y = Math.round(c.position.y);
+                            c.position.z = Math.round(c.position.z);
+                        });
+                        
+                        pivot.rotation.set(0, 0, 0);
+                        isAnimating = false;
+                        resolve();
+                    }
+                }
+                requestAnimationFrame(animateStep);
+            });
+        }
+
+        // --- 5. ADVANCED 3D DRAG MATH ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const plane = new THREE.Plane();
+        
+        let dragStartMouse = null;
+        let dragStart3D = new THREE.Vector3();
+        let activeCubie = null;
+        let activeNormal = new THREE.Vector3();
+
+        window.addEventListener('pointerdown', (e) => {
+            if (e.target.tagName === 'BUTTON' || isAnimating) return;
+
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(allCubies);
+
+            if (intersects.length > 0) {
+                controls.enabled = false;
+                activeCubie = intersects[0].object;
+                
+                activeNormal.copy(intersects[0].face.normal);
+                activeNormal.transformDirection(activeCubie.matrixWorld).round();
+                
+                dragStart3D.copy(intersects[0].point);
+                plane.setFromNormalAndCoplanarPoint(activeNormal, dragStart3D);
+                
+                dragStartMouse = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (!activeCubie || isAnimating) {
+                controls.enabled = true;
+                return;
+            }
+
+            const dx = e.clientX - dragStartMouse.x;
+            const dy = e.clientY - dragStartMouse.y;
+            
+            if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
+                mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
+                
+                const dragEnd3D = new THREE.Vector3();
+                raycaster.ray.intersectPlane(plane, dragEnd3D);
+                
+                if (dragEnd3D) {
+                    const pullDirection = new THREE.Vector3().subVectors(dragEnd3D, dragStart3D);
+                    const axisVector = new THREE.Vector3().crossVectors(activeNormal, pullDirection);
+                    
+                    const absX = Math.abs(axisVector.x);
+                    const absY = Math.abs(axisVector.y);
+                    const absZ = Math.abs(axisVector.z);
+                    
+                    let turnAxis, direction;
+
+                    if (absX > absY && absX > absZ) {
+                        turnAxis = 'x'; direction = Math.sign(axisVector.x);
+                    } else if (absY > absX && absY > absZ) {
+                        turnAxis = 'y'; direction = Math.sign(axisVector.y);
+                    } else {
+                        turnAxis = 'z'; direction = Math.sign(axisVector.z);
+                    }
+
+                    const level = activeCubie.position[turnAxis];
+                    rotateLayer(turnAxis, level, Math.sign(direction));
+                }
+            }
+            activeCubie = null;
+            controls.enabled = true; 
+        });
+
+        // --- 6. UI BUTTONS ---
+        document.getElementById('resetCamBtn').addEventListener('click', () => {
+            camera.position.set(5.5, 5.5, 6.5);
+            controls.target.set(0,0,0);
+        });
+
+        // The New Reset Cube Logic
+        document.getElementById('resetCubeBtn').addEventListener('click', () => {
+            if (isAnimating) return;
+            allCubies.forEach(cubie => {
+                cubie.position.copy(cubie.userData.initialPosition);
+                cubie.quaternion.copy(cubie.userData.initialRotation);
+                cubie.updateMatrixWorld();
+            });
+        });
+
+        document.getElementById('shuffleBtn').addEventListener('click', async () => {
+            if (isAnimating) return;
+            const axes = ['x', 'y', 'z'];
+            const levels = [-1, 0, 1];
+            const dirs = [1, -1];
+
+            for (let i = 0; i < 20; i++) {
+                const a = axes[Math.floor(Math.random() * 3)];
+                const l = levels[Math.floor(Math.random() * 3)];
+                const d = dirs[Math.floor(Math.random() * 2)];
+                await rotateLayer(a, l, d, 75);
+            }
+        });
+
+        // --- 7. RENDER LOOP ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
