@@ -318,13 +318,13 @@
         }
         body.light-theme .page-bottom-counter { color: #475569; }
 
-        /* ========================================= */
-        /* TOP LEFT CUBE LINK BUTTON                 */
+/* ========================================= */
+        /* TOP LEFT CUBE LINK BUTTON (3D Animated)   */
         /* ========================================= */
         #cube-link {
             position: fixed; 
             top: 20px;
-            left: 20px; /* Locked to the left */
+            left: 20px; 
             background: #1c1d24;
             width: 45px;
             height: 45px;
@@ -334,21 +334,60 @@
             align-items: center;
             z-index: 10000; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            color: #0d6efd; /* Cool blue color for the cube */
-            font-size: 20px;
             text-decoration: none;
-            transition: transform 0.2s ease, background 0.3s, color 0.3s;
+            transition: transform 0.2s ease, background 0.3s;
+            perspective: 150px; /* Required to make the cube look 3D */
         }
         
         #cube-link:hover { 
-            transform: scale(1.1); 
-            color: #0b5ed7;
+            transform: scale(1.15); 
         }
 
-        /* Light Theme Support for the Cube */
+        /* 3D Mini Cube Container */
+        .mini-cube {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinMiniCube 5s infinite linear;
+        }
+
+        /* Speed up spin on hover! */
+        #cube-link:hover .mini-cube {
+            animation: spinMiniCube 1.5s infinite linear;
+        }
+
+        /* The 6 colorful faces */
+        .mini-cube .face {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            /* Border mimics the black plastic grid of a Rubik's cube */
+            border: 2px solid #1c1d24; 
+            border-radius: 2px;
+        }
+
+        /* Classic Rubik's Cube Colors */
+        .mini-cube .front  { background: #009b48; transform: translateZ(9px); } 
+        .mini-cube .back   { background: #0045ad; transform: rotateY(180deg) translateZ(9px); } 
+        .mini-cube .right  { background: #b90000; transform: rotateY(90deg) translateZ(9px); } 
+        .mini-cube .left   { background: #ff5900; transform: rotateY(-90deg) translateZ(9px); } 
+        .mini-cube .top    { background: #ffffff; transform: rotateX(90deg) translateZ(9px); } 
+        .mini-cube .bottom { background: #ffd500; transform: rotateX(-90deg) translateZ(9px); } 
+
+        /* Tumbling Animation */
+        @keyframes spinMiniCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* Light Theme Support */
         body.light-theme #cube-link {
             background: #ffffff;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        body.light-theme .mini-cube .face {
+            border-color: #000000; /* Changes plastic grid to white in light mode */
         }
 
     </style>
@@ -360,8 +399,15 @@
     </div>
 
     <!-- TOP LEFT: Rubik's Cube Link -->
-    <a href="cube.html" id="cube-link" title="Open Rubik's Cube">
-        <i class="fas fa-cube"></i>
+<a href="cube.html" id="cube-link" title="Open Rubik's Cube">
+        <div class="mini-cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
     </a>
     
     <div class="main-wrapper">
