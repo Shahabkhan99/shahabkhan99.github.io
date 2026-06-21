@@ -4,7 +4,7 @@
     "issuer": "Microsoft",
     "date": "Issued Jun 2026",
     "image": "assets/img/certificates/ai.png",
-    "category": "filter-AI Ethics","filter-AI Literacy","AI Tools Adoption","Applied AI","Artificial Intelligence Applications","Build Automation","Prompt Engineering","Responsible AI","Workflow Automation",
+    "category": "filter-ai",
     "details": [
       "Earners demonstrate foundational and applied AI knowledge, including how to use AI tools to enhance productivity, create content, and solve real-world problems.",
       "They can identify practical use cases, apply AI responsibly, and continue building skills through guided learning pathways."
